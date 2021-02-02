@@ -1,0 +1,52 @@
+Feb 01, 2021 3:39:28 PM com.carParking.CarParking main
+INFO: New car registered
+Feb 01, 2021 3:40:06 PM com.carParking.CarParking main
+INFO: Alloted floor: 1 slot 1
+Feb 01, 2021 3:50:42 PM com.carParking.CarParking main
+INFO: New car registered
+Feb 01, 2021 3:51:04 PM com.carParking.CarParking main
+INFO: New car registered
+Feb 02, 2021 11:29:27 AM com.carParking.Main main
+INFO: Main Class is running
+Feb 02, 2021 11:29:45 AM com.carParking.ParkCar initiate
+INFO: Main Class is running
+Feb 02, 2021 11:29:58 AM com.carParking.ParkCar initiate
+INFO: New car registered with floor: 1 slot 1
+Feb 02, 2021 11:30:24 AM com.carParking.ParkCar initiate
+INFO: New car registered with floor: 1 slot 2
+Feb 02, 2021 11:30:35 AM com.carParking.ParkCar initiate
+INFO: 1 
+Feb 02, 2021 11:30:44 AM com.carParking.ParkCar initiate
+INFO: Alloted floor: 1 slot 2
+Feb 02, 2021 11:30:56 AM com.carParking.ParkCar initiate
+INFO: Floor 1 slot 2
+Feb 02, 2021 11:31:03 AM com.carParking.Main main
+INFO: Invalid input
+Feb 02, 2021 11:33:07 AM com.carParking.ParkCar initiate
+INFO: Main Class is running
+Feb 02, 2021 11:33:16 AM com.carParking.ParkCar initiate
+INFO: New car registered with floor: 1 slot 1
+Feb 02, 2021 11:33:24 AM com.carParking.ParkCar initiate
+INFO: New car registered with floor: 1 slot 2
+Feb 02, 2021 11:33:44 AM com.carParking.ParkCar initiate
+INFO: New car registered with floor: 1 slot 3
+Feb 02, 2021 11:33:54 AM com.carParking.ParkCar initiate
+INFO: 1 
+Feb 02, 2021 11:33:54 AM com.carParking.ParkCar initiate
+INFO: 3 
+Feb 02, 2021 11:34:10 AM com.carParking.ParkCar initiate
+INFO: Alloted floor: 1 slot 3
+Feb 02, 2021 11:34:21 AM com.carParking.ParkCar initiate
+INFO: Floor 1 slot 1
+Feb 02, 2021 11:34:21 AM com.carParking.ParkCar initiate
+INFO: Floor 1 slot 3
+Feb 02, 2021 11:53:58 AM com.carParking.ParkCar initiate
+INFO: Main Class is running
+Feb 02, 2021 11:54:08 AM com.carParking.ParkCar initiate
+INFO: New car registered with floor: 1 slot 1
+Feb 02, 2021 11:54:17 AM com.carParking.ParkCar initiate
+INFO: 1 
+Feb 02, 2021 11:54:23 AM com.carParking.ParkCar initiate
+INFO: No case matched
+Feb 02, 2021 11:54:33 AM com.carParking.ParkCar initiate
+INFO: 1 
