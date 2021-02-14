@@ -23,9 +23,9 @@ public class DbBaseClient {
         ((DbBaseClient)thisObject).createObject(car);
         else log.info("Client connection failed");
     }
-    public void getRegNo(String color) throws IOException {
+    public void getRegNoByColor(String color) throws IOException {
         if(!client.equals("DbBaseClient"))
-        ((DbBaseClient)thisObject).getRegNo(color);
+        ((DbBaseClient)thisObject).getRegNoByColor(color);
         else log.info("Error in getting registration number from color");
     }
 

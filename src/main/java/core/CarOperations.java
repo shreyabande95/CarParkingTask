@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class CarOperation {
+public class CarOperations {
     public static List<Boolean> slots;
-    static Logger log = Logger.getLogger(CarOperation.class.getName());
-    public CarOperation() {
+    static Logger log = Logger.getLogger(CarOperations.class.getName());
+    public CarOperations() {
         slots=new ArrayList<Boolean>();
         for(int i=0;i<100;i++){
             slots.add(true);				//initially all slots are vacant
@@ -54,7 +54,7 @@ public class CarOperation {
                             String col;
                             System.out.println("Enter color: ");
                             col=sc.next();
-                            dbClient.getRegNo(col);
+                            dbClient.getRegNoByColor(col);
 
                             break;
 

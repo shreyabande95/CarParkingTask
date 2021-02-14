@@ -1,1 +1,2 @@
-DBClient=client.Mongodb
+DBClient=client.Redis
+hostName=localhost
