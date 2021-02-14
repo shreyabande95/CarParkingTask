@@ -1,6 +1,5 @@
-import core.CarOperation;
+import core.CarOperations;
 
-import java.io.FileReader;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -19,7 +18,7 @@ public class CarParkingManager {
             }
             prop.load(input);
             StringBuilder calledClass = new StringBuilder(prop.getProperty("DBClient"));
-            CarOperation operation=new CarOperation();
+            CarOperations operation=new CarOperations();
             operation.initiate(calledClass);
         }catch(Exception e) {
             e.printStackTrace();
