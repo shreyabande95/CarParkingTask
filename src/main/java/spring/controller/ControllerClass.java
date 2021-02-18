@@ -1,17 +1,17 @@
-package spring;
+package spring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import spring.dto.Car;
-import spring.repository.CarRepository;
+import spring.repository.CarOperations;
 
 @RestController
 @RequestMapping("/parkedCars")
 public class ControllerClass {
     @Autowired
-    CarRepository carRepo;
+    CarOperations carRepo;
 
-    public ControllerClass(CarRepository carRepository){
+    public ControllerClass(CarOperations carRepository){
         carRepo=carRepository;
         System.out.println("Controller class");
     }

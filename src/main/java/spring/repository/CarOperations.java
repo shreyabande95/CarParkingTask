@@ -1,91 +1,139 @@
 package spring.repository;
 
-import spring.database.Redis;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import spring.dto.Car;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Logger;
+import java.util.Map;
 
+@Repository
+@Transactional
 public class CarOperations {
+    @Autowired
+    public RedisTemplate<String, Car> redis;
+
+    public HashOperations hashOperations;
     public static List<Boolean> slots;
-    static Logger log = Logger.getLogger(CarOperations.class.getName());
-    public CarOperations() {
+    static int count;
+
+    public CarOperations(RedisTemplate<String,Car> redisTemplate){
+        redis=redisTemplate;
+        hashOperations=redis.opsForHash();
+        System.out.println("redis constructor initialised");
         slots=new ArrayList<Boolean>();
         for(int i=0;i<100;i++){
             slots.add(true);				//initially all slots are vacant
         }
+        count=1;
+        System.out.println("Slots initialised");
     }
 
-    public void initiate() {
-        boolean flag=true;
-        Redis redis=new Redis();
-        //DbBaseClient dbClient=new DbBaseClient();
-        //dbClient.setClient(calledClass);
-        do {
-            Scanner sc=new Scanner(System.in);
-            System.out.println("New car? yes/no: ");	//if parked already, enter no, else yes
-            String ans=sc.nextLine();
-            switch(ans){
-                case ("yes"):
-                    int regNo; String color;
-                    System.out.println("Enter the Registration Number of your Car: ");
-                    regNo=sc.nextInt();
-                    System.out.println("Enter its color: ");
-                    color=sc.next();
-                    int allotThisSlot=allotSlot();
-                    Car car=new Car(regNo,color,allotThisSlot);
-                    redis.createObject(car);
-                    break;
-                case ("no"):
-                    System.out.println("Press: ");
-                    System.out.println(" 1 to display Registration Number of all cars with a particular color");
-                    System.out.println(" 2 to get Slot number of your parked car");
-                    System.out.println(" 3 to get Slot numbers of all slots where cars of particular color are parked");
-                    System.out.println(" 4 to Depark your car");
-                    int option=sc.nextInt();
-                    switch(option) {
-                        case 1:
-                            String col;
-                            System.out.println("Enter color: ");
-                            col = sc.next();
-                            redis.getRegNoByColor(col);
-                            break;
-                        case 2:
-                            System.out.println("Enter your Car's Registration Number: ");
-                            int rNo = sc.nextInt();
-                            redis.getSlot(rNo);
-                            break;
-                        case 3:
-                            System.out.println("Enter color: ");
-                            String c = sc.next();
-                            redis.getSlot(c);
-                            break;
-                        case 4:
-                            System.out.println("Enter your Registration Number: ");
-                            int carrno = sc.nextInt();
-                            redis.dePark(carrno);
-                            break;
-                        default:
-                            log.info("No case matched");
-                    }
-                    break;
-                default:
-                    log.info("No case matched");
-            }
-            System.out.println("Do you want to continue? yes/no");
-            Scanner sc2=new Scanner(System.in);
-            String con=sc2.nextLine();
-            flag=con.equals("yes");
-        } while(flag==true);
-
-            redis.deleteCollection();
-    }
-
-    public int allotSlot() {
+    public int assignSlot() {
         int vac=slots.indexOf(true);	// find first vacant slot
         slots.set(vac,false);
         return vac;
     }
+
+
+    public void addCar(Car car){
+        //int regNo= checkDuplicate(car.getRegistrationNo());
+        int floor= (car.getSlot()/20)+1;
+        int slot=(car.getSlot()%20)+1;
+        hashOperations.put("parkedCars"+count,"Registration Number",car.getRegistrationNo());
+        hashOperations.put("parkedCars"+count,"Color",car.getColor());
+        hashOperations.put("parkedCars"+count,"Floor",floor);
+        hashOperations.put("parkedCars"+count,"Slot",slot);
+        count++;
+    }
+
+    public String getRegNoByColor(String color) {
+        String res = " ";
+        for (int i = 1; i < count; i++) {
+            Map<String, Car> parkedCars = hashOperations.entries("parkedCars" + i);
+            for (Map.Entry<String, Car> entry : parkedCars.entrySet()) {
+                String key = entry.getKey();
+                String val = String.valueOf(entry.getValue());
+                if (key.equals("Color") && (val.equals(color))) {
+                    for (Map.Entry<String, Car> subentry : parkedCars.entrySet()) {
+                        String subkey = subentry.getKey();
+                        if (subkey.equals("Registration Number")) {
+                            res = res + "[" + String.valueOf(subentry.getValue()) + "] ";
+                        }
+                    }
+                }
+            }
+
+        }
+        return res;
+    }
+
+    public String getSlot(int regNo) {
+        String res = " ";
+        for (int i = 1; i < count; i++) {
+            Map<String, Car> parkedCars = hashOperations.entries("parkedCars" + i);
+            for (Map.Entry<String, Car> entry : parkedCars.entrySet()) {
+                String key = entry.getKey();
+                String val = String.valueOf(entry.getValue());
+                if(key.equals("Registration Number")&&(val.equals(String.valueOf(regNo)))){
+                    for(Map.Entry<String, Car> subentry : parkedCars.entrySet()){
+                        String subkey= subentry.getKey();
+                        if(subkey.equals("Floor")){
+                            res=res+"[Floor:"+String.valueOf(subentry.getValue())+" Slot:";
+                            break;
+                        }
+                    }
+                    for(Map.Entry<String, Car> subentry : parkedCars.entrySet()){
+                        String subkey= subentry.getKey();
+                        if(subkey.equals("Slot")){
+                            res=res+""+subentry.getValue()+"] ";
+                            break;
+                        }
+                    }
+                    break;
+                }
+
+            }
+        }
+        return res;
+    }
+
+
+    public String getSlotByColor(String color) {
+        String res=" ";
+        for (int i = 1; i < count; i++) {
+            Map<String, Car> parkedCars = hashOperations.entries("parkedCars"+i);
+            for (Map.Entry<String, Car> entry : parkedCars.entrySet()){
+                String key=entry.getKey();
+                String val= String.valueOf(entry.getValue());
+                if((key.equals("Color"))&&val.equals(color)){
+                    String result=String.valueOf(entry);
+                    for(Map.Entry<String, Car> subentry : parkedCars.entrySet()){
+                        String subkey= subentry.getKey();
+                        if(subkey.equals("Floor")){
+                            res=res+"[Floor:"+String.valueOf(subentry.getValue())+" Slot:";
+                            break;
+                        }
+                    }
+                    for(Map.Entry<String, Car> subentry : parkedCars.entrySet()){
+                        String subkey= subentry.getKey();
+                        if(subkey.equals("Slot")){
+                            res=res+""+subentry.getValue()+"] ";
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+        }
+        return res;
+    }
 }
+
+
+
