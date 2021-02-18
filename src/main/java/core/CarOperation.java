@@ -54,7 +54,7 @@ public class CarOperation {
                             String col;
                             System.out.println("Enter color: ");
                             col=sc.next();
-                            dbClient.getRegNo(col);
+                            dbClient.getRegNoByColor(col);
 
                             break;
 
